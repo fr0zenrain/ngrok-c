@@ -1,7 +1,7 @@
 #ifndef OPENSSLBIO_H_INCLUDED
 #define OPENSSLBIO_H_INCLUDED
 #include "config.h"
-#include<malloc.h>
+#include<stdlib.h>
 #include<openssl/ssl.h>
 #include<openssl/bio.h>
 #include<openssl/err.h>

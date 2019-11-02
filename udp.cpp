@@ -152,7 +152,7 @@ int UdpRecv(fd_set* readSet){
 
         memset(&fromAddr, 0, sizeof(struct  sockaddr_in));
         int strLen = recvfrom(udpInfo.msock, buffer, 65534, 0, (struct sockaddr *)&fromAddr, &addrLen);
-        if(strlen>0&&strLen!=-1){
+        if(strLen>0&&strLen!=-1){
 
             printf("udp:%s\r\n",buffer+8);
             cJSON *json = cJSON_Parse( buffer+8);

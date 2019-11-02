@@ -75,10 +75,16 @@ int keepalive = 1; // 开启keepalive属性
 int keepidle = 60000; // 如该连接在60秒内没有任何数据往来,则进行探测
 int keepinterval = 60000; // 探测时发包的时间间隔为5 秒
 int keepcount = 1; // 探测尝试的次数.如果第1次探测包就收到响应了,则后2次的不再发.
+#ifdef __MACH__
+int on = 1, secs = 10;
+setsockopt(sock, SOL_SOCKET,  SO_KEEPALIVE, &on, sizeof on);
+setsockopt(sock, IPPROTO_TCP, TCP_KEEPALIVE, &secs, sizeof secs);
+#else
 setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (void *)&keepalive , sizeof(keepalive ));
 setsockopt(sock, SOL_TCP, TCP_KEEPIDLE, (void*)&keepidle , sizeof(keepidle ));
 setsockopt(sock, SOL_TCP, TCP_KEEPINTVL, (void *)&keepinterval , sizeof(keepinterval ));
 setsockopt(sock, SOL_TCP, TCP_KEEPCNT, (void *)&keepcount , sizeof(keepcount ));
+#endif
 return 0;
 }
 #endif // WIN32

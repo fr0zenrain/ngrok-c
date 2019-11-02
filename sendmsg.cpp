@@ -29,13 +29,13 @@ int SendReqTunnel(int sock,ssl_context *ssl,TunnelInfo *tunnelInfo)
 {
     char guid[20]={0};
     rand_str(guid,5);
-    char str[1024];
-    memset(str,0,1024);
+    char str[1524];
+    memset(str,0,1524);
     memset(tunnelInfo->ReqId,0,20);
     //copy
     memcpy(tunnelInfo->ReqId,guid,strlen(guid));
-    sprintf(str,"{\"Type\":\"ReqTunnel\",\"Payload\":{\"Protocol\":\"%s\",\"ReqId\":\"%s\",\"Hostname\": \"%s\",\"Subdomain\":\"%s\",\"HttpAuth\":\"\",\"RemotePort\":%d,\"authtoken\":\"%s\"}}",tunnelInfo->protocol,tunnelInfo->ReqId,tunnelInfo->hostname,tunnelInfo->subdomain,tunnelInfo->remoteport,mainInfo.authtoken);
-    tunnelInfo->regtime=getUnixTime();//ÒÑ·¢
+    snprintf(str, 1524, "{\"Type\":\"ReqTunnel\",\"Payload\":{\"Protocol\":\"%s\",\"ReqId\":\"%s\",\"Hostname\": \"%s\",\"Subdomain\":\"%s\",\"HttpAuth\":\"%s\",\"RemotePort\":%d,\"authtoken\":\"%s\"}}",tunnelInfo->protocol,tunnelInfo->ReqId,tunnelInfo->hostname,tunnelInfo->subdomain,tunnelInfo->httpauth,tunnelInfo->remoteport,mainInfo.authtoken);
+    tunnelInfo->regtime=getUnixTime();//ï¿½Ñ·ï¿½
     return sendpack(sock,ssl,str,1);
 }
 
@@ -60,7 +60,8 @@ int loadargs( int argc, char **argv )
 			if ( pos == -1 )
 			{
 				printf( "argv error:%s", argvstr );
-			}else  {
+			}else
+            {
 				if ( strncmp( argvstr, "-SER", 4 ) == 0 )
 				{
 					run = 1;
@@ -152,6 +153,8 @@ int loadargs( int argc, char **argv )
                         {
                             tunnelinfo->remoteport = atoi( temp );
                         }
+
+                        getvalue(jsonstr,"HTTPAuth",tunnelinfo->httpauth);
 
                         getvalue(jsonstr,"Sdname",tunnelinfo->subdomain);
                         getvalue(jsonstr,"Hostheader",tunnelinfo->hostheader);
